@@ -14,6 +14,7 @@ import numpy as np
 #pip install opencv-python
 import cv2 
 import json
+import os
 
 #define faceblur function
 def anonymize_face_simple(image, factor=7.0):
@@ -37,9 +38,7 @@ def anonymize_face_simple(image, factor=7.0):
 
 def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
     dat = json.load(open(ann_file, "r")) # read in MD ouput .JSON
-    
-    print("number of images:", len(dat["images"]))
-    
+        
     for img in range(0,len(dat["images"])):
         tmp = dat["images"][img]
         file = tmp["file"]
@@ -86,7 +85,6 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
             orig = image.copy()
             cv2.imwrite(str(imgs_out)+"\\"+file, orig)
             
-            
-    print("All",len(dat["images"]),"images at site complete")      
-
+    print("All",len(dat["images"]),"images at site",os.path.basename(imgs_out),"complete")      
+    dat.clear()
 

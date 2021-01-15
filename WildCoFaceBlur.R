@@ -4,7 +4,7 @@
 
 # M Fennell
 # mitchfen@mail.ubc.ca
-# Last updated: January 14, 2021
+# Last updated: January 15, 2021
 
 ### 0. Setup workspace ####
 
@@ -17,28 +17,31 @@ library(reticulate)
 getwd() # Should be location of .Rproj, which should also contain your inputs, otherwise hard code below
 
 ### 1. Set arguments ####
-json_in <- "CATH31_test.json"
-img_dir_in <- "CATH31_test"
-img_dir_out <- "CATH31_test_out_R"
-blur_level <- 7.0
-conf <- 0.3
+img_dir_in <- "CATH_In" # Contains imgs in site folders WITH relevant .json
+img_dir_out <- "CATH_Out"
+blur_level <- 7.0 # Lower values of this create "blurrier" images (recommend 3-7)
+conf <- 0.25 # Confidence threshold in MegaDetector output to apply blur to
 
 ### 2. Load in Python script ####
 py_install("opencv-python", pip = TRUE) #This may take a minute your first time 
 source_python("FaceBlur.py")
 
 ### 3. Execute blurring ####
-face_blur(json_in,img_dir_in,img_dir_out)
+if (dir.exists(img_dir_out) == FALSE){
+  dir.create(img_dir_out)}
+img_dirs <- list.dirs(img_dir_in) 
+img_dirs <- img_dirs[-1]
+n.sites <- length(img_dirs)
 
-# Looooooooooop
-
-img_dirs <- list.dirs(img_dir_in) #contains imgs in site folders WITH relevant .JSON
-n.sites <- len(img_dirs)
-for (site in 1:len(img_dirs)){
-  json_in <- 
-  site_dir_out <- 
-  site_dir_in <- 
+for (site in 1:length(img_dirs)){
+  json_in <- list.files(img_dirs[site], pattern = "\\.json$",full.names = T)
+  if (dir.exists(paste0(img_dir_out,"/", basename(img_dirs[site]))) == FALSE){
+    dir.create(paste0(img_dir_out,"/", basename(img_dirs[site])))
+    site_dir_out <- paste0(img_dir_out,"/", basename(img_dirs[site]))
+  } else { 
+  site_dir_out <- paste0(img_dir_out,"/", basename(img_dirs[site]))}
+  site_dir_in <- img_dirs[site] 
   face_blur(json_in,site_dir_in,site_dir_out,blur_level,conf)
-  print(paste0("Site",site,"of",len(img_dirs),"complete"))
+  print(paste0("Site ",site," of ",length(img_dirs)," complete"))
 }
 
