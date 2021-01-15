@@ -2,16 +2,18 @@
 """
 Created on Tue Jan 12 14:28:50 2021
 
+Blurs camera trap images identified as human by Microsoft MegaDetector
+
+M Fennell
+mitchfen@mail.ubc.ca
+
 @author: mitchfen
 """
 # import the necessary packages
-#import os
 import numpy as np 
 #pip install opencv-python
-import cv2 # pip install opencv-python
+import cv2 
 import json
-
-#os.chdir('D:\\Mitch\\WildCo_FaceBlur') # set working dir
 
 #define faceblur function
 def anonymize_face_simple(image, factor=7.0):
@@ -31,12 +33,9 @@ def anonymize_face_simple(image, factor=7.0):
 	return cv2.GaussianBlur(image, (kW, kH), 0)
 
 
-# Initializations (make them as arguments)
-#ann_file = "D:\\Mitch\\WildCo_FaceBlur\\CATH31_test.json"
-#imgs_in = "D:\\Mitch\\WildCo_FaceBlur\\CATH31_test"
-#imgs_out = "D:\\Mitch\\WildCo_FaceBlur\\CATH31_test_out_0.3"
+# Initializations 
 
-def face_blur(ann_file, imgs_in, imgs_out):
+def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
     dat = json.load(open(ann_file, "r")) # read in MD ouput .JSON
     
     print("number of images:", len(dat["images"]))
@@ -51,7 +50,7 @@ def face_blur(ann_file, imgs_in, imgs_out):
                 bbox = tmp2["bbox"]
                 cat = int(tmp2["category"])
                 conf = float(tmp2["conf"])
-                if cat == 2 and conf >= 0.3:
+                if cat == 2 and conf >= conf_lim:
                     if d == 0:
                         image = cv2.imread(str(imgs_in)+"\\"+file)
                         (h,w) = image.shape[:2]
@@ -60,7 +59,7 @@ def face_blur(ann_file, imgs_in, imgs_out):
                         endX = startX + boxwide
                         endY = startY + boxhigh
                         face = image[startY:endY, startX:endX]
-                        face = anonymize_face_simple(face)
+                        face = anonymize_face_simple(face, factor=blur)
                         image[startY:endY, startX:endX] = face
                         cv2.imwrite(str(imgs_out)+"\\"+file, image)
                         cv2.destroyAllWindows()
@@ -72,11 +71,11 @@ def face_blur(ann_file, imgs_in, imgs_out):
                         endX = startX + boxwide
                         endY = startY + boxhigh
                         face = image[startY:endY, startX:endX]
-                        face = anonymize_face_simple(face)
+                        face = anonymize_face_simple(face, factor=blur)
                         image[startY:endY, startX:endX] = face
                         cv2.imwrite(str(imgs_out)+"\\"+file, image)
                         cv2.destroyAllWindows()
-                elif cat == 2 and conf < 0.3:
+                elif cat == 2 and conf < conf_lim:
                     continue
                 else:
                     image = cv2.imread(str(imgs_in)+"\\"+file)
@@ -88,6 +87,6 @@ def face_blur(ann_file, imgs_in, imgs_out):
             cv2.imwrite(str(imgs_out)+"\\"+file, orig)
             
             
-    print("All images complete")      
+    print("All",len(dat["images"]),"images at site complete")      
 
 
