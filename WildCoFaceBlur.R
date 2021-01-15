@@ -4,15 +4,17 @@
 
 # M Fennell
 # mitchfen@mail.ubc.ca
-# Last updated: January 13, 2021
+# Last updated: January 14, 2021
 
 ### 0. Setup workspace ####
+
+###*** GO HERE FIRST AND DOWNLOAD MINICONDA FOR YOUR OS (this is Python + Packages) ###
+### https://docs.conda.io/en/latest/miniconda.html ###
 
 #install.packages("reticulate")
 library(reticulate)
 
-getwd()
-setwd("D:/Mitch/WildCo_FaceBlur")
+getwd() # Should be location of .Rproj, which should also contain your inputs, otherwise hard code below
 
 ### 1. Set arguments ####
 json_in <- "CATH31_test.json"
@@ -20,8 +22,9 @@ img_dir_in <- "CATH31_test"
 img_dir_out <- "CATH31_test_out_R"
 
 ### 2. Load in Python script ####
-py_install("opencv-python", pip = TRUE)
+py_install("opencv-python", pip = TRUE) #This may take a minute your first time 
 source_python("FaceBlur.py")
 
+### 3. Execute blurring ####
 face_blur(json_in,img_dir_in,img_dir_out)
 
