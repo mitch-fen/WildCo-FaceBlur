@@ -27,11 +27,19 @@ Miniconda can be downloaded here: https://docs.conda.io/en/latest/miniconda.html
 5. Open up the R project (or create a new one), setting the working directory to the folder from step 3. (with everything inside)
 
 6. Open up WildCoFaceBlur.R 
+
 6a. Set your arguments:
 * img_dir_in = your "input" folder from step 4
 * img_dir_out = where you want the blurred images to go
 * blur_level = The "blurriness" applied to each human. Lower values are more obscured. I reccomend values between 3 and 7. 
 * conf = The MegaDetector confidence threshold you wish to apply blurring above. This is situationally dependent on MegaDetector performance for your study area, so may     require fine tuning. 
     
- 7. Run the script! The first few installation steps may take a few minutes the first time as new Python packages are installed, but otherwise you should be smooth sailing. 
+7. Run the script! The first few installation steps may take a few minutes the first time as new Python packages are installed, but otherwise you should be smooth sailing. 
 
+## Errors
+IF you see the error: 
+
+ Error in py_call_impl(callable, dots$args, dots$keywords) : 
+  AttributeError: 'NoneType' object has no attribute 'shape' 
+  
+It is likely that you have the wrong .json in a given stations folder. 
