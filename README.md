@@ -1,5 +1,5 @@
 # WildCo-FaceBlur
-Obscures human identities in camera trap images after processing via Microsoft MegaDetector
+Obscures human identities in camera trap images after processing via Microsoft MegaDetector (https://github.com/microsoft/CameraTraps/blob/master/megadetector.md)
 
 ## This project requires two files:
 ### WildCoFaceBlur.R
