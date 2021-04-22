@@ -17,6 +17,9 @@ library(reticulate)
 getwd() # Should be location of .Rproj, which should also contain your inputs, otherwise hard code below
 
 ### 1. Set arguments ####
+# Do you have sub folders for camera checks? If yes, set TRUE, if no, set FALSE
+date_folders <- TRUE # Must be one or the other, not mixed
+
 img_dir_in <- "CATH_In" # Contains imgs in site folders WITH relevant .json
 img_dir_out <- "CATH_Out"
 blur_level <- 7.0 # Lower values of this create "blurrier" images (recommend 3-7)
@@ -29,19 +32,38 @@ source_python("FaceBlur.py")
 ### 3. Execute blurring ####
 if (dir.exists(img_dir_out) == FALSE){
   dir.create(img_dir_out)}
-img_dirs <- list.dirs(img_dir_in) 
-img_dirs <- img_dirs[-1]
+img_dirs <- unique(dirname(list.files(img_dir_in, rec=T, full.names = T)))
+#img_dirs <- list.dirs(img_dir_in) # Replaced with above to allow potential for date folders
+#img_dirs <- img_dirs[-1]
 n.sites <- length(img_dirs)
 
-for (site in 1:length(img_dirs)){
-  json_in <- list.files(img_dirs[site], pattern = "\\.json$",full.names = T)
-  if (dir.exists(paste0(img_dir_out,"/", basename(img_dirs[site]))) == FALSE){
-    dir.create(paste0(img_dir_out,"/", basename(img_dirs[site])))
-    site_dir_out <- paste0(img_dir_out,"/", basename(img_dirs[site]))
-  } else { 
-  site_dir_out <- paste0(img_dir_out,"/", basename(img_dirs[site]))}
-  site_dir_in <- img_dirs[site] 
-  face_blur(json_in,site_dir_in,site_dir_out,blur_level,conf)
-  print(paste0("Site ",site," of ",length(img_dirs)," complete"))
+if (date_folders == FALSE){
+  for (site in 1:length(img_dirs)){
+    json_in <- list.files(img_dirs[site], pattern = "\\.json$",full.names = T)
+    if (dir.exists(paste0(img_dir_out,"/", basename(img_dirs[site]))) == FALSE){
+      dir.create(paste0(img_dir_out,"/", basename(img_dirs[site])))
+      site_dir_out <- paste0(img_dir_out,"/", basename(img_dirs[site]))
+    } else { 
+    site_dir_out <- paste0(img_dir_out,"/", basename(img_dirs[site]))}
+    site_dir_in <- img_dirs[site] 
+    face_blur(json_in,site_dir_in,site_dir_out,blur_level,conf)
+    print(paste0("Site ",site," of ",length(img_dirs)," complete"))
+  }
+} else if (date_folders == TRUE){
+  for (site in 1:length(img_dirs)){
+    json_in <- list.files(img_dirs[site], pattern = "\\.json$",full.names = T)
+    if (dir.exists(paste0(img_dir_out, gsub("(.*?)(/.*)(/.*)","\\2",img_dirs[site]))) == FALSE){
+      dir.create(paste0(img_dir_out, gsub("(.*?)(/.*)(/.*)","\\2",img_dirs[site])))
+    }
+    if (dir.exists(paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site]))) == FALSE){
+      dir.create(paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site])))
+      site_dir_out <- paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site]))
+    } else { 
+      site_dir_out <- paste0(img_dir_out ,gsub("(.*?)(/.*)","\\2",img_dirs[site]))}
+    site_dir_in <- img_dirs[site] 
+    face_blur(json_in,site_dir_in,site_dir_out,blur_level,conf)
+    print(paste0("Site ",site," of ",length(img_dirs)," complete"))
+  }
 }
+
 
