@@ -42,4 +42,4 @@ IF you see the error:
  Error in py_call_impl(callable, dots$args, dots$keywords) : 
   AttributeError: 'NoneType' object has no attribute 'shape' 
   
-It is likely that you have the wrong .json in a given stations folder. 
+It is likely that you have the wrong .json in a given stations folder, or your image names do match up with what you ran through MegaDetector. 
