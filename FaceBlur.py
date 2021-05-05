@@ -74,8 +74,6 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         image[startY:endY, startX:endX] = face
                         cv2.imwrite(str(imgs_out)+"\\"+file, image)
                         cv2.destroyAllWindows()
-                elif cat == 2 and conf < conf_lim:
-                    continue
                 else:
                     image = cv2.imread(str(imgs_in)+"\\"+file)
                     orig = image.copy()
