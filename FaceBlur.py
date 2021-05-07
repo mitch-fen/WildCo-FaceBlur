@@ -14,7 +14,7 @@ import numpy as np
 #pip install opencv-python
 import cv2 
 import json
-import os
+import os 
 from PIL import Image
 
 #define faceblur function
@@ -36,11 +36,6 @@ def anonymize_face_simple(image, factor=7.0):
 
 
 # Initializations 
-#ann_file = "D:\Mitch\WildCo_FaceBlur\CATH14\\2019-07-03 to 2019-10-02\\CATH14_2019-07-03 to 2019-10-02.json"
-#imgs_in = "D:\Mitch\WildCo_FaceBlur\\CATH14\\2019-07-03 to 2019-10-02"
-#imgs_out = "D:\Mitch\WildCo_FaceBlur\\CATH_Out"
-#conf_lim = 0.25
-#blur = 0.7
 
 def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
     dat = json.load(open(ann_file, "r")) # read in MD ouput .JSON
@@ -49,7 +44,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
         tmp = dat["images"][img]
         file = tmp["file"]
         det = tmp["detections"]
-        img_with_exif = Image.open(str(imgs_in)+"\\"+file, 'r')
+        img_with_exif = Image.open(str(imgs_in)+"\\"+file, 'r') # Extract exif data from original
         if len(det) != 0:
             for d in range(0,len(det)):
                 tmp2 = det[d]
@@ -67,9 +62,9 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         face = image[startY:endY, startX:endX]
                         face = anonymize_face_simple(face, factor=blur)
                         image[startY:endY, startX:endX] = face
-                        cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                        cv_img_as_pil = Image.fromarray(cv_img_rgb)
-                        cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
+                        cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # convert RBG from openCV to RGB for pillow
+                        cv_img_as_pil = Image.fromarray(cv_img_rgb) # convert from CV2 array to pillow format
+                        cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif']) # Save and assign exifdata
                         cv2.destroyAllWindows()
                     else:
                         image = cv2.imread(str(imgs_out)+"\\"+file)
