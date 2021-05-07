@@ -14,7 +14,8 @@ import numpy as np
 #pip install opencv-python
 import cv2 
 import json
-import os
+import os 
+from PIL import Image
 
 #define faceblur function
 def anonymize_face_simple(image, factor=7.0):
@@ -43,6 +44,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
         tmp = dat["images"][img]
         file = tmp["file"]
         det = tmp["detections"]
+        img_with_exif = Image.open(str(imgs_in)+"\\"+file, 'r') # Extract exif data from original
         if len(det) != 0:
             for d in range(0,len(det)):
                 tmp2 = det[d]
@@ -60,7 +62,9 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         face = image[startY:endY, startX:endX]
                         face = anonymize_face_simple(face, factor=blur)
                         image[startY:endY, startX:endX] = face
-                        cv2.imwrite(str(imgs_out)+"\\"+file, image)
+                        cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # convert RBG from openCV to RGB for pillow
+                        cv_img_as_pil = Image.fromarray(cv_img_rgb) # convert from CV2 array to pillow format
+                        cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif']) # Save and assign exifdata
                         cv2.destroyAllWindows()
                     else:
                         image = cv2.imread(str(imgs_out)+"\\"+file)
@@ -72,16 +76,23 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         face = image[startY:endY, startX:endX]
                         face = anonymize_face_simple(face, factor=blur)
                         image[startY:endY, startX:endX] = face
-                        cv2.imwrite(str(imgs_out)+"\\"+file, image)
+                        cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                        cv_img_as_pil = Image.fromarray(cv_img_rgb)
+                        cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
                         cv2.destroyAllWindows()
                 else:
                     image = cv2.imread(str(imgs_in)+"\\"+file)
                     orig = image.copy()
-                    cv2.imwrite(str(imgs_out)+"\\"+file, orig)
+                    cv_img_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
+                    cv_img_as_pil = Image.fromarray(cv_img_rgb)
+                    cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
+                    
         else:
             image = cv2.imread(str(imgs_in)+"\\"+file)
             orig = image.copy()
-            cv2.imwrite(str(imgs_out)+"\\"+file, orig)
+            cv_img_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
+            cv_img_as_pil = Image.fromarray(cv_img_rgb)
+            cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
             
     print("All",len(dat["images"]),"images at site",os.path.basename(imgs_out),"complete")      
     dat.clear()

@@ -26,8 +26,9 @@ blur_level <- 7.0 # Lower values of this create "blurrier" images (recommend 3-7
 conf <- 0.25 # Confidence threshold in MegaDetector output to apply blur to
 
 ### 2. Load in Python script ####
-py_install("opencv-python", pip = TRUE) #This may take a minute your first time 
-source_python("FaceBlur.py")
+py_install("opencv-python", pip = TRUE)#This may take a minute your first time 
+py_install("pillow", pip = TRUE) #This may take a minute your first time 
+source_python("FaceBlur.py") #This may take a minute your first time 
 
 ### 3. Execute blurring ####
 if (dir.exists(img_dir_out) == FALSE){
