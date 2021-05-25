@@ -34,8 +34,6 @@ source_python("FaceBlur.py") #This may take a minute your first time
 if (dir.exists(img_dir_out) == FALSE){
   dir.create(img_dir_out)}
 img_dirs <- unique(dirname(list.files(img_dir_in, rec=T, full.names = T)))
-#img_dirs <- list.dirs(img_dir_in) # Replaced with above to allow potential for date folders
-#img_dirs <- img_dirs[-1]
 n.sites <- length(img_dirs)
 
 if (date_folders == FALSE){
@@ -55,11 +53,11 @@ if (date_folders == FALSE){
     json_in <- list.files(img_dirs[site], pattern = "\\.json$",full.names = T)
     if (dir.exists(paste0(img_dir_out, gsub("(.*?)(/.*)(/.*)","\\2",img_dirs[site]))) == FALSE){
       dir.create(paste0(img_dir_out, gsub("(.*?)(/.*)(/.*)","\\2",img_dirs[site])))
-    }
+    } 
     if (dir.exists(paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site]))) == FALSE){
       dir.create(paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site])))
       site_dir_out <- paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site]))
-    } else { 
+    } else if (dir.exists(paste0(img_dir_out, gsub("(.*?)(/.*)","\\2",img_dirs[site]))) == TRUE){ 
       site_dir_out <- paste0(img_dir_out ,gsub("(.*?)(/.*)","\\2",img_dirs[site]))}
     site_dir_in <- img_dirs[site] 
     face_blur(json_in,site_dir_in,site_dir_out,blur_level,conf)
