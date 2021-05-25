@@ -65,7 +65,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # convert RBG from openCV to RGB for pillow
                         cv_img_as_pil = Image.fromarray(cv_img_rgb) # convert from CV2 array to pillow format
                         cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif']) # Save and assign exifdata
-                        cv2.destroyAllWindows()
+                        #cv2.destroyAllWindows()
                     else:
                         image = cv2.imread(str(imgs_out)+"\\"+file)
                         (h,w) = image.shape[:2]
@@ -79,7 +79,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                         cv_img_as_pil = Image.fromarray(cv_img_rgb)
                         cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
-                        cv2.destroyAllWindows()
+                        #cv2.destroyAllWindows()
                 else:
                     image = cv2.imread(str(imgs_in)+"\\"+file)
                     orig = image.copy()
