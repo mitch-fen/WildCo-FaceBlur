@@ -43,3 +43,5 @@ IF you see the error:
   AttributeError: 'NoneType' object has no attribute 'shape' 
   
 It is likely that you have the wrong .json in a given stations folder, or your image names do match up with what you ran through MegaDetector. 
+
+The progress updates in the R script currently duplicate, but this does not effect the actual proessing of images!
