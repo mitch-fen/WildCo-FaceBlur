@@ -81,11 +81,14 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
                         #cv2.destroyAllWindows()
                 else:
-                    image = cv2.imread(str(imgs_in)+"\\"+file)
-                    orig = image.copy()
-                    cv_img_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
-                    cv_img_as_pil = Image.fromarray(cv_img_rgb)
-                    cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
+                    if d == 0:
+                        image = cv2.imread(str(imgs_in)+"\\"+file)
+                        orig = image.copy()
+                        cv_img_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
+                        cv_img_as_pil = Image.fromarray(cv_img_rgb)
+                        cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
+                    else:
+                        continue 
                     
         else:
             image = cv2.imread(str(imgs_in)+"\\"+file)
