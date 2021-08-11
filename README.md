@@ -22,7 +22,7 @@ Miniconda can be downloaded here: https://docs.conda.io/en/latest/miniconda.html
 
 4. In the same folder, create an "input" folder with your desired name
 * Within your "input" folder, create individual sub-folders for each of your camera trap sites/deployments. 
-* Within these site specific folders, paste the MegaDetector .json file and camera trap photos corresponding to the site. No sub-folders within the site folders. 
+* Within these site specific folders, paste the MegaDetector .json file and camera trap photos corresponding to the site. 
   
 5. Open up the R project (or create a new one), setting the working directory to the folder from step 3. (with everything inside)
 
