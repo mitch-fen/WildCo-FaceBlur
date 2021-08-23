@@ -38,7 +38,7 @@ Miniconda can be downloaded here: https://docs.conda.io/en/latest/miniconda.html
 
 ## Errors
 
-The progress updates in the R script currently duplicate, but this does not effect the actual proessing of images!
+The progress updates in the R script currently duplicate at times, but this does not effect the actual processing of images!
 
 IF you see the error: 
 
