@@ -2,6 +2,8 @@
 """
 Created on Tue Jan 12 14:28:50 2021
 
+Updated Aug 23, 2021
+
 Blurs camera trap images identified as human by Microsoft MegaDetector
 
 M Fennell
@@ -26,10 +28,11 @@ def anonymize_face_simple(image, factor=7.0):
 	kH = int(h / factor)
 	# ensure the width of the kernel is odd
 	if kW % 2 == 0:
-		kW -= 1
+		kW += 1
 	# ensure the height of the kernel is odd
 	if kH % 2 == 0:
-		kH -= 1
+		kH += 1
+
 	# apply a Gaussian blur to the input image using our computed
 	# kernel size
 	return cv2.GaussianBlur(image, (kW, kH), 0)
@@ -65,7 +68,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) # convert RBG from openCV to RGB for pillow
                         cv_img_as_pil = Image.fromarray(cv_img_rgb) # convert from CV2 array to pillow format
                         cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif']) # Save and assign exifdata
-                        #cv2.destroyAllWindows()
+                        cv2.destroyAllWindows()
                     else:
                         image = cv2.imread(str(imgs_out)+"\\"+file)
                         (h,w) = image.shape[:2]
@@ -79,7 +82,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         cv_img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
                         cv_img_as_pil = Image.fromarray(cv_img_rgb)
                         cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
-                        #cv2.destroyAllWindows()
+                        cv2.destroyAllWindows()
                 else:
                     if d == 0:
                         image = cv2.imread(str(imgs_in)+"\\"+file)
@@ -87,6 +90,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
                         cv_img_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
                         cv_img_as_pil = Image.fromarray(cv_img_rgb)
                         cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
+                        cv2.destroyAllWindows()
                     else:
                         continue 
                     
@@ -96,6 +100,7 @@ def face_blur(ann_file, imgs_in, imgs_out, blur, conf_lim):
             cv_img_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
             cv_img_as_pil = Image.fromarray(cv_img_rgb)
             cv_img_as_pil.save(str(imgs_out)+"\\"+file, format='JPEG', exif=img_with_exif.info['exif'])
+            cv2.destroyAllWindows()
             
     print("All",len(dat["images"]),"images at site",os.path.basename(imgs_out),"complete")      
     dat.clear()
