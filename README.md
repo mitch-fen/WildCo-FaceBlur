@@ -41,9 +41,12 @@ Miniconda can be downloaded here: https://docs.conda.io/en/latest/miniconda.html
 7. Run the script! The first few installation steps may take a few minutes the first time as new Python packages are installed, but otherwise you should be smooth sailing. 
 
 ## Errors
+
 IF you see the error: 
 
  Error in py_call_impl(callable, dots$args, dots$keywords) : 
   AttributeError: 'NoneType' object has no attribute 'shape' 
   
 It is likely that you have the wrong .json in a given stations folder, or your image names do match up with what you ran through MegaDetector. 
+
+
