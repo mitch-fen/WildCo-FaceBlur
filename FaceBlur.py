@@ -2,7 +2,7 @@
 """
 Created on Tue Jan 12 14:28:50 2021
 
-Updated Aug 23, 2021
+Updated Nov 24, 2021
 
 Blurs camera trap images identified as human by Microsoft MegaDetector
 
