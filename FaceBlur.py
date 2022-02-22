@@ -18,7 +18,7 @@ import json
 import os 
 from PIL import Image
 
-#define faceblur function
+#define faceblur function (based on: https://pyimagesearch.com/2020/04/06/blur-and-anonymize-faces-with-opencv-and-python/)
 def anonymize_face_simple(image, factor=7.0):
 	# automatically determine the size of the blurring kernel based
 	# on the spatial dimensions of the input image
